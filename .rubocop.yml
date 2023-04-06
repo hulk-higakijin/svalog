@@ -1,0 +1,53 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  SuggestExtensions: false
+  # 最新のルールを適用する
+  NewCops: enable
+  # 何のルールに引っかかったか表示する
+  DisplayCopNames: true
+  # rubocop対象外(リポジトリ毎で調節)
+  Exclude:
+    - "bin/**/*"
+    - "db/**/*"
+    - "log/**/*"
+    - "spec/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "lib/tasks/auto_annotate_models.rake"
+    - "config/environments/*"
+    - "config/puma.rb"
+
+Layout/LineLength:
+  Max: 200
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Layout/IndentationConsistency:
+  EnforcedStyle: indented_internal_methods
+
+Lint/MissingSuper:
+  Enabled: false
