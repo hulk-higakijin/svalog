@@ -23,6 +23,11 @@
           <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input input-bordered w-full max-w-xs" %>
         </div>
 
+        <div class="field">
+          <%= f.label :role %><br />
+          <%= f.select :role, User.roles.except("admin"), {}, class: "select select-bordered" %>
+        </div>
+
         <div class="actions">
           <%= f.submit "Sign up", class: "btn btn-primary" %>
         </div>
