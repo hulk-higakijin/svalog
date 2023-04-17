@@ -6,8 +6,13 @@
         <%= render "devise/shared/error_messages", resource: resource %>
 
         <div class="field">
+          <%= f.label :name %><br />
+          <%= f.text_field :name, autofocus: true, autocomplete: "name", class: "input input-bordered w-full max-w-xs" %>
+        </div>
+
+        <div class="field">
           <%= f.label :email %><br />
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input input-bordered w-full max-w-xs" %>
+          <%= f.email_field :email, autocomplete: "email", class: "input input-bordered w-full max-w-xs" %>
         </div>
 
         <div class="field">
@@ -21,6 +26,11 @@
         <div class="field">
           <%= f.label :password_confirmation %><br />
           <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input input-bordered w-full max-w-xs" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :role %><br />
+          <%= f.select :role, User.roles.except("admin").keys, {}, class: "select select-bordered" %>
         </div>
 
         <div class="actions">
