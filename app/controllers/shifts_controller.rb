@@ -9,7 +9,7 @@ class ShiftsController < ApplicationController
   private
 
     def set_year_and_month
-      @year = params[:year].to_i || this_year
-      @month = params[:month].to_i || this_month
+      @year = params[:year].to_i.zero? ? this_year : params[:year].to_i
+      @month = params[:month].to_i.zero? ? this_month : params[:month].to_i
     end
 end
