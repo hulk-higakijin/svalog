@@ -1,4 +1,7 @@
-今年は<%= @year %>です
-今月は<%= @month %>です
-
-シフトは<%= @shift %>です
+<div class="md:w-1/4 mx-auto">
+  <div class="flex text-primary text-2xl font-bold">
+    <%= link_to '←', shifts_path(year: @date.last_month.year, month: @date.last_month.month) %>
+    <h2 class="mb-4 mx-auto"><%= @date.year %>/<%= @date.month %> のシフト</h2>
+    <%= link_to '→', shifts_path(year: @date.next_month.year, month: @date.next_month.month) %>
+  </div>
+</div>
