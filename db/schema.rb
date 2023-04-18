@@ -24,11 +24,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_044916) do
 
   create_table "shifts", force: :cascade do |t|
     t.uuid "user_id", null: false
-    t.time "start_at"
-    t.time "finish_at"
-    t.integer "break_time"
-    t.integer "hourly_wage"
-    t.date "date"
+    t.time "start_at", null: false
+    t.time "finish_at", null: false
+    t.integer "break_time", default: 0, null: false
+    t.integer "hourly_wage", default: 0, null: false
+    t.date "date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_shifts_on_user_id"
