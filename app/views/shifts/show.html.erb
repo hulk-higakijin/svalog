@@ -15,7 +15,7 @@
       </tr>
     </thead>
 
-    <% (@date.beginning_of_month..@date.end_of_month).each_with_index do |date, i|  %>
+    <% (@date.all_month).each_with_index do |date, i|  %>
     <tbody>
       <tr class="<%= 'active' if i % 2 == 0 %>">
         <th><%= l date, format: :short_with_day %></th>
@@ -28,6 +28,6 @@
   </table>
 
   <div class="flex py-4">
-    <%= link_to "Edit", "#", class: "btn btn-sm px-8 btn-primary ml-auto" %>
+    <%= link_to "Edit", edit_shifts_path(year: @year, month: @month), class: "btn btn-sm px-8 btn-primary ml-auto" %>
   </div>
 </div>

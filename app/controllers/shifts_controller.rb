@@ -2,9 +2,27 @@ class ShiftsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_year_and_month
   before_action :set_date
+  before_action :set_shifts
 
-  def show
-    @shifts = current_user.shifts
+  def show; end
+
+  def edit; end
+
+  def update
+    shifts = []
+    shift_params.each do |id, shift_data|
+      date = Date.new(@year, @month, id.to_i)
+      start_at = DateTime.new(@year, @month, id.to_i, shift_data[:start_at]['(4i)'].to_i, shift_data[:start_at]['(5i)'].to_i)
+      finish_at = DateTime.new(@year, @month, id.to_i, shift_data[:finish_at]['(4i)'].to_i, shift_data[:finish_at]['(5i)'].to_i)
+      break_time = shift_data['break_time'].to_i
+      hourly_wage = 1500 # 仮置き
+
+      next if finish_at - start_at <= 0
+
+      shifts << { date:, start_at:, finish_at:, break_time:, hourly_wage:, user_id: current_user.id }
+    end
+
+    Shift.insert_all(shifts)
   end
 
   private
@@ -16,5 +34,13 @@ class ShiftsController < ApplicationController
 
     def set_date
       @date = Date.new(@year, @month)
+    end
+
+    def set_shifts
+      @shifts = current_user.shifts.where(date: @date.all_month)
+    end
+
+    def shift_params
+      params.require(:shifts).permit!
     end
 end
