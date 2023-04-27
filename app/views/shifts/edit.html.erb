@@ -14,19 +14,19 @@
         </tr>
       </thead>
 
-        <% (@date.all_month).each_with_index do |date, i|  %>
+        <% @shifts_with_dates.each_with_index do |(date, shift), i|  %>
         <tbody>
           <tr class="<%= 'active' if i % 2 == 0 %>">
-            <th><%= l date, format: :short_with_day %></th>
-            <th>
-              <%= f.time_select "shifts[#{i + 1}][start_at]", { minute_step: 30 }, { class: "border"} %>
-            </th>
-            <th>
-              <%= f.time_select "shifts[#{i + 1}][finish_at]", { minute_step: 30 }, { class: "border" } %>
-            </th>
-            <th>
-              <%= f.select "shifts[#{i + 1}][break_time]", (0..90).step(10), {}, { class: "input input-xs input-bordered w-20" } %>
-            </th>
+            <td><%= l(date, format: :short_with_day) %></td>
+            <td>
+              <%= f.time_select "shifts[#{i + 1}][start_at]", { default: shift&.start_at, minute_step: 30 }, { class: "border" }  %>
+            </td>
+            <td>
+              <%= f.time_select "shifts[#{i + 1}][finish_at]", { default: shift&.finish_at, minute_step: 30 }, { class: "border" } %>
+            </td>
+            <td>
+              <%= f.select "shifts[#{i + 1}][break_time]", (0..90).step(10), { selected: shift&.break_time }, { class: "input input-xs input-bordered w-20" } %>
+            </td>
           </tr>
         </tbody>
         <% end %>
