@@ -12,17 +12,20 @@ class ShiftsController < ApplicationController
     shifts = []
     shift_params.each do |id, shift_data|
       date = Date.new(@year, @month, id.to_i)
-      start_at = DateTime.new(@year, @month, id.to_i, shift_data[:start_at]['(4i)'].to_i, shift_data[:start_at]['(5i)'].to_i)
-      finish_at = DateTime.new(@year, @month, id.to_i, shift_data[:finish_at]['(4i)'].to_i, shift_data[:finish_at]['(5i)'].to_i)
+
+      start_at = DateTime.new(this_year, this_month, id.to_i, shift_data[:start_at]['(4i)'].to_i, shift_data[:start_at]['(5i)'].to_i)
+      finish_at = DateTime.new(this_year, this_month, id.to_i, shift_data[:finish_at]['(4i)'].to_i, shift_data[:finish_at]['(5i)'].to_i)
       break_time = shift_data['break_time'].to_i
       hourly_wage = 1500 # 仮置き
-
-      next if finish_at - start_at <= 0
 
       shifts << { date:, start_at:, finish_at:, break_time:, hourly_wage:, user_id: current_user.id }
     end
 
-    Shift.insert_all(shifts)
+    if Shift.upsert_all(shifts, unique_by: :index_shifts_on_user_id_and_date)
+      redirect_to shifts_path
+    else
+      render :edit
+    end
   end
 
   private
