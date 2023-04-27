@@ -15,13 +15,13 @@
       </tr>
     </thead>
 
-    <% (@date.all_month).each_with_index do |date, i|  %>
+    <% @shifts_with_dates.each_with_index do |(date, shift), i| %>
     <tbody>
       <tr class="<%= 'active' if i % 2 == 0 %>">
-        <th><%= l date, format: :short_with_day %></th>
-        <th>10:00</th>
-        <th>19:00</th>
-        <th>60</th>
+        <td><%= l(date, format: :short_with_day) %></td>
+        <td><%= shift&.start_at&.strftime("%H:%M") || "-" %></td>
+        <td><%= shift&.finish_at&.strftime("%H:%M") || "-" %></td>
+        <td><%= shift&.break_time&.positive? ? shift.break_time : "-" %></td>
       </tr>
     </tbody>
     <% end %>

@@ -37,7 +37,8 @@ class ShiftsController < ApplicationController
     end
 
     def set_shifts
-      @shifts = current_user.shifts.where(date: @date.all_month)
+      @shifts = current_user.shifts.where(date: @date.all_month).to_a
+      @shifts_with_dates = @date.all_month.index_with { |date| @shifts.detect { |s| s.date == date } }
     end
 
     def shift_params
