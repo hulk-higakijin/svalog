@@ -1,4 +1,4 @@
-class MembersController < ApplicationController
+class Members::ShiftsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_members
 
