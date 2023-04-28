@@ -9,24 +9,14 @@ class ShiftsController < ApplicationController
   def edit; end
 
   def update
-    ActiveRecord::Base.transaction do
-      shift_params.each do |id, shift_data|
-        date = Date.new(@year, @month, id.to_i)
-
-        start_at = DateTime.new(@year, @month, id.to_i, shift_data[:start_at]['(4i)'].to_i, shift_data[:start_at]['(5i)'].to_i)
-        finish_at = DateTime.new(@year, @month, id.to_i, shift_data[:finish_at]['(4i)'].to_i, shift_data[:finish_at]['(5i)'].to_i)
-        break_time = shift_data['break_time'].to_i
-        hourly_wage = 1500 # 仮置き
-
-        shift = Shift.find_or_initialize_by(date:, user_id: current_user.id)
-        shift.assign_attributes(start_at:, finish_at:, break_time:, hourly_wage:)
-        shift.save
-      end
+    begin
+      save_shifts
+    rescue ActiveRecord::RecordInvalid
+      render :edit
+      return
     end
 
     redirect_to shifts_path(year: @year, month: @month)
-  rescue ActiveRecord::RecordInvalid
-    render :edit
   end
 
   private
@@ -47,5 +37,24 @@ class ShiftsController < ApplicationController
 
     def shift_params
       params.require(:shifts).permit!
+    end
+
+    def save_shifts
+      ActiveRecord::Base.transaction do
+        shift_params.each do |id, shift_data|
+          date = Date.new(@year, @month, id.to_i)
+          start_at, finish_at = build_start_and_finish_times(shift_data, date)
+          break_time = shift_data['break_time'].to_i
+          shift = Shift.find_or_initialize_by(date:, user_id: current_user.id)
+          shift.assign_attributes(start_at:, finish_at:, break_time:, hourly_wage: 1500)
+          shift.save
+        end
+      end
+    end
+
+    def build_start_and_finish_times(shift_data, date)
+      start_at = build_datetime(date, shift_data[:start_at])
+      finish_at = build_datetime(date, shift_data[:finish_at])
+      [start_at, finish_at]
     end
 end
