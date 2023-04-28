@@ -1,0 +1,10 @@
+本日出勤のメンバー
+
+
+<% @shifts.each do |shift| %>
+  <p><%= shift.user.name %></p>
+
+  <p><%= shift.start_at.strftime("%H:%M") %> ~ <%= shift.finish_at.strftime("%H:%M") %>（休憩：<%= shift.break_time %>min）</p>
+
+  <br> 
+<% end %>

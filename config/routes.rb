@@ -3,5 +3,9 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :companies, only: %i[show new create edit update]
-  resource :shifts, only: %i[show new create edit update]
+  resource :shifts, only: %i[show edit update]
+
+  namespace :members do
+    get :today
+  end
 end
