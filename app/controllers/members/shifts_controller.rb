@@ -1,8 +1,7 @@
 class Members::ShiftsController < ApplicationController
   include Shiftable
   before_action :authenticate_user!
-  before_action :set_year_and_month
-  before_action :set_date
+  before_action :set_dates
   before_action :set_members
 
   def show
