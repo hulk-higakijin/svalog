@@ -4,10 +4,11 @@ module Shiftable
   def set_year_and_month
     @year = params[:year].to_i.zero? ? this_year : params[:year].to_i
     @month = params[:month].to_i.zero? ? this_month : params[:month].to_i
+    @day = params[:day].to_i.zero? ? Time.zone.today.day : params[:day].to_i
   end
 
   def set_date
-    @date = Date.new(@year, @month)
+    @date = Date.new(@year, @month, @day)
   end
 
   def set_shifts

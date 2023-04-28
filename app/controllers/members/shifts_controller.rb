@@ -1,9 +1,12 @@
 class Members::ShiftsController < ApplicationController
+  include Shiftable
   before_action :authenticate_user!
+  before_action :set_year_and_month
+  before_action :set_date
   before_action :set_members
 
   def show
-    @shifts = Shift.where(date: Time.zone.today, user_id: @members.pluck(:id)).order(:start_at)
+    @shifts = Shift.where(date: @date, user_id: @members.pluck(:id)).order(:start_at)
   end
 
   private
