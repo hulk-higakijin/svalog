@@ -9,23 +9,24 @@ class ShiftsController < ApplicationController
   def edit; end
 
   def update
-    shifts = []
-    shift_params.each do |id, shift_data|
-      date = Date.new(@year, @month, id.to_i)
+    ActiveRecord::Base.transaction do
+      shift_params.each do |id, shift_data|
+        date = Date.new(@year, @month, id.to_i)
 
-      start_at = DateTime.new(this_year, this_month, id.to_i, shift_data[:start_at]['(4i)'].to_i, shift_data[:start_at]['(5i)'].to_i)
-      finish_at = DateTime.new(this_year, this_month, id.to_i, shift_data[:finish_at]['(4i)'].to_i, shift_data[:finish_at]['(5i)'].to_i)
-      break_time = shift_data['break_time'].to_i
-      hourly_wage = 1500 # 仮置き
+        start_at = DateTime.new(@year, @month, id.to_i, shift_data[:start_at]['(4i)'].to_i, shift_data[:start_at]['(5i)'].to_i)
+        finish_at = DateTime.new(@year, @month, id.to_i, shift_data[:finish_at]['(4i)'].to_i, shift_data[:finish_at]['(5i)'].to_i)
+        break_time = shift_data['break_time'].to_i
+        hourly_wage = 1500 # 仮置き
 
-      shifts << { date:, start_at:, finish_at:, break_time:, hourly_wage:, user_id: current_user.id }
+        shift = Shift.find_or_initialize_by(date:, user_id: current_user.id)
+        shift.assign_attributes(start_at:, finish_at:, break_time:, hourly_wage:)
+        shift.save
+      end
     end
 
-    if Shift.upsert_all(shifts, unique_by: :index_shifts_on_user_id_and_date)
-      redirect_to shifts_path
-    else
-      render :edit
-    end
+    redirect_to shifts_path(year: @year, month: @month)
+  rescue ActiveRecord::RecordInvalid
+    render :edit
   end
 
   private

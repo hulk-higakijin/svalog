@@ -3,7 +3,7 @@
     <h2 class="mb-4 mx-auto"><%= @date.year %>/<%= @date.month %> のシフト申請</h2>
   </div>
 
-  <%= form_with(url: shifts_path, method: :put) do |f| %>
+  <%= form_with(url: shifts_path(year: @year, month: @month), method: :put) do |f| %>
     <table class="table table-compact w-full text-center">
       <thead>
         <tr>
