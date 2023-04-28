@@ -36,7 +36,14 @@ class ShiftsController < ApplicationController
     end
 
     def shift_params
-      params.require(:shifts).permit!
+      permitted_parameters = params.require(:shifts).keys.map do |key|
+        { key => [
+          :break_time,
+          { start_at: ['(4i)', '(5i)'],
+            finish_at: ['(4i)', '(5i)'] } # (1i)~(3i)は無関係なので弾く
+        ] }
+      end
+      params.require(:shifts).permit(permitted_parameters)
     end
 
     def save_shifts
